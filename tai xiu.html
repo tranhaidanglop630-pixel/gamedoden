@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tai Xiu Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #4c4848;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .dice {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .die {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 10px;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .buttons {
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .bet-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .roll-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        .result {
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .score {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Trò Chơi Tài Xỉu</h1>
+        <div class="score">
+            <p>Tiền của bạn: <span id="money">1000</span> VND</p>
+            <p>Cược: <span id="bet">0</span> VND</p>
+        </div>
+        <div class="buttons">
+            <button class="bet-btn" onclick="bet('tai')">Cược Tài</button>
+            <button class="bet-btn" onclick="bet('xiu')">Cược Xỉu</button>
+            <button class="roll-btn" onclick="rollDice()">Lắc Xúc Xắc</button>
+        </div>
+        <div class="dice">
+            <div class="die" id="die1">?</div>
+            <div class="die" id="die2">?</div>
+            <div class="die" id="die3">?</div>
+        </div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        let money = 1000;
+        let currentBet = 0;
+        let betType = '';
+
+        function bet(type) {
+            if (currentBet === 0) {
+                currentBet = 300; // Default bet
+                betType = type;
+                document.getElementById('bet').textContent = currentBet;
+                document.getElementById('result').textContent = `Bạn đã cược ${type === 'tai' ? 'Tài' : 'Xỉu'} ${currentBet} VND`;
+            } else {
+                alert('Bạn đã đặt cược rồi!');
+            }
+        }
+
+        function rollDice() {
+            if (currentBet === 0) {
+                alert('Hãy đặt cược trước!');
+                return;
+            }
+
+            const die1 = Math.floor(Math.random() * 6) + 1;
+            const die2 = Math.floor(Math.random() * 6) + 1;
+            const die3 = Math.floor(Math.random() * 6) + 1;
+            const sum = die1 + die2 + die3;
+
+            document.getElementById('die1').textContent = die1;
+            document.getElementById('die2').textContent = die2;
+            document.getElementById('die3').textContent = die3;
+
+            let result = '';
+            if (sum >= 11) {
+                result = 'Tài';
+                if (betType === 'tai') {
+                    money += currentBet;
+                    result += ' - Bạn thắng!';
+                } else {
+                    money -= currentBet;
+                    result += ' - Bạn thua!';
+                }
+            } else {
+                result = 'Xỉu';
+                if (betType === 'xiu') {
+                    money += currentBet;
+                    result += ' - Bạn thắng!';
+                } else {
+                    money -= currentBet;
+                    result += ' - Bạn thua!';
+                }
+            }
+
+            document.getElementById('result').textContent = `Tổng: ${sum} - ${result}`;
+            document.getElementById('money').textContent = money;
+            currentBet = 0;
+            betType = '';
+            document.getElementById('bet').textContent = currentBet;
+        }
+    </script>
+</body>
+</html>
