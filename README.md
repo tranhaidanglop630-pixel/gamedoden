@@ -1,2 +1,0 @@
-# gamedoden
-choimanhtayvao
